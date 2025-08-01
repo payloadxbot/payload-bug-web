@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payload | WA Bug Tool</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Share+Tech+Mono&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0f0f0f;
+      color: #00ff88;
+      font-family: 'Share Tech Mono', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-image: url('https://i.imgur.com/1Q8ZQwE.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-blend-mode: multiply;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00ff88;
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+      animation: fadeIn 2s ease;
+      position: relative;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #ff0066;
+      text-shadow: 0 0 8px #ff0066;
+    }
+
+    .typing {
+      border-right: 2px solid #00ff88;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 4s steps(40, end), blink 0.75s step-end infinite;
+      width: 100%;
+      display: inline-block;
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+
+    .input-group {
+      margin: 20px 0;
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      border: none;
+      border-radius: 5px;
+      background-color: #111;
+      color: #00ff88;
+      font-size: 1rem;
+      outline: none;
+      text-align: center;
+    }
+
+    .btn {
+      margin: 10px 5px;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+      color: #fff;
+    }
+
+    .btn-android { background-color: #ff0044; }
+    .btn-ios { background-color: #007aff; }
+    .btn-invisible { background-color: #aa00ff; }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .glitch {
+      font-size: 1.2rem;
+      color: #fff;
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0% { text-shadow: 2px 2px #f0f, -2px -2px #0ff; }
+      50% { text-shadow: -2px 2px #0ff, 2px -2px #f0f; }
+      100% { text-shadow: 2px -2px #0ff, -2px 2px #f0f; }
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .telegram-link {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #00bfff;
+      font-size: 1rem;
+      margin-top: 20px;
+    }
+
+    .telegram-link img {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Payload v3.0</h1>
+    <div class="typing">Connecting to WhatsApp Gateway...</div>
+
+    <div class="input-group">
+      <input type="text" id="target" placeholder="Masukkan No WhatsApp target +62..." />
+    </div>
+
+    <p class="glitch">Choose Bug Type to Inject 🔥</p>
+
+    <div>
+      <button id="btnAndroid" class="btn btn-android" onclick="startPayload('Kill Android')">Kill Android</button>
+      <button id="btnInvisible" class="btn btn-invisible" onclick="startPayload('Kill Invisible')">Kill Invisible</button>
+      <button id="btnIOS" class="btn btn-ios" onclick="startPayload('Kill iOS')">Kill iOS</button>
+    </div>
+
+    <a class="telegram-link" href="https://t.me/jembutttttttttttttt" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram Icon" />
+      @jembutttttttttttttt
+    </a>
+  </div>
+
+  <script>
+    const cooldownSeconds = 60;
+    const buttons = [
+      document.getElementById("btnAndroid"),
+      document.getElementById("btnInvisible"),
+      document.getElementById("btnIOS")
+    ];
+
+    function startPayload(type) {
+      const number = document.getElementById("target").value.trim();
+      if (!number) {
+        alert("⚠️ Masukkan nomor WhatsApp target terlebih dahulu!");
+        return;
+      }
+
+      alert(`✅ ${type} Bug Injected ke ${number}\nSimulasi berhasil dijalankan.`);
+
+      const cooldownEnd = Date.now() + cooldownSeconds * 1000;
+      localStorage.setItem("payloadCooldown", cooldownEnd);
+      beginCooldown(cooldownEnd);
+    }
+
+    function beginCooldown(cooldownEnd) {
+      disableAllButtons();
+      const interval = setInterval(() => {
+        const now = Date.now();
+        const remaining = Math.floor((cooldownEnd - now) / 1000);
+
+        if (remaining > 0) {
+          buttons.forEach(btn => btn.innerText = `Cooldown: ${remaining}s`);
+        } else {
+          clearInterval(interval);
+          enableAllButtons();
+          resetButtonText();
+          localStorage.removeItem("payloadCooldown");
+        }
+      }, 1000);
+    }
+
+    function disableAllButtons() {
+      buttons.forEach(btn => btn.disabled = true);
+    }
+
+    function enableAllButtons() {
+      buttons.forEach(btn => btn.disabled = false);
+    }
+
+    function resetButtonText() {
+      buttons[0].innerText = "Kill Android";
+      buttons[1].innerText = "Kill Invisible";
+      buttons[2].innerText = "Kill iOS";
+    }
+
+    // Check cooldown on load
+    window.onload = () => {
+      const cooldownEnd = localStorage.getItem("payloadCooldown");
+      if (cooldownEnd && parseInt(cooldownEnd) > Date.now()) {
+        beginCooldown(parseInt(cooldownEnd));
+      }
+    }
+  </script>
+</body>
+</html>
